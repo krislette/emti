@@ -54,7 +54,7 @@ Main execution script:
 ### Network Structure
 
 - Input Layer:    1 neuron  (single value at each time step)
-- Hidden Layer:   16 neurons (bidirectional: 8 forward + 8 backward)
+- Hidden Layer:   16 neurons (bidirectional: 16 forward + 16 backward)
 - Output Layer:   1 neuron  (predicted clean value)
 
 ### How Bidirectional Processing Works
