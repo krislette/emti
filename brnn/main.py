@@ -34,9 +34,11 @@ def train_model(model, train_data, demo_input, demo_true, demo_max):
 
     full_inputs, full_targets = train_data
 
+    # One epoch = one full pass through the entire training dataset
     for epoch in range(1, NUM_EPOCHS + 1):
         epoch_loss = 0.0
 
+        # Loop through every geometric sequence entry in the dataset (one full epoch)
         for i in range(len(full_inputs)):
             outputs = model.feedforward(full_inputs[i])
             model.backpropagation(full_inputs[i], outputs, full_targets[i], LR)
