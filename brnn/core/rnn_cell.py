@@ -19,11 +19,11 @@ class RNNCell:
         # Hidden bias initialized to zero, shape (hidden_size, 1)
         self.hidden_bias = np.zeros((hidden_size, 1))
 
-    def forward(self, word_vec: np.ndarray, prev_hidden: np.ndarray) -> np.ndarray:
-        # Formula: pre_activation = (input_weights @ word_vec) + (hidden_weights @ prev_hidden) + hidden_bias
+    def forward(self, input_vec: np.ndarray, prev_hidden: np.ndarray) -> np.ndarray:
+        # Formula: pre_activation = (input_weights @ input_vec) + (hidden_weights @ prev_hidden) + hidden_bias
         # Performs: (H, I) @ (I, 1) + (H, H) @ (H, 1) + (H, 1) = (H, 1)
         pre_activation = (
-            self.input_weights @ word_vec
+            self.input_weights @ input_vec
             + self.hidden_weights @ prev_hidden
             + self.hidden_bias
         )
@@ -33,7 +33,7 @@ class RNNCell:
 
         # Save inputs and pre-activation for use in backward()
         self.cache = {
-            "word_vec": word_vec,
+            "input_vec": input_vec,
             "prev_hidden": prev_hidden,
             "pre_activation": pre_activation,
         }
@@ -47,7 +47,7 @@ class RNNCell:
 
         # Step 2: Gradient for input weights
         # (H, 1) @ (1, I) = (H, I), same shape as input_weights
-        input_weight_grad = pre_act_grad @ self.cache["word_vec"].T
+        input_weight_grad = pre_act_grad @ self.cache["input_vec"].T
 
         # Step 3: Gradient for hidden weights (recurrent connection)
         # (H, 1) @ (1, H) = (H, H), same shape as hidden_weights

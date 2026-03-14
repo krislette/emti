@@ -64,6 +64,7 @@ class BidirectionalRNN:
         mid = T // 2
 
         # Step 1: MSE gradient only at the middle position
+        # Derivative of loss with respect to output
         # All other positions get zero gradient, we only care about fixing the middle
         output_grads = [np.zeros_like(outputs[t]) for t in range(T)]
         output_grads[mid] = 2 * (outputs[mid] - targets[0])
@@ -71,10 +72,11 @@ class BidirectionalRNN:
         # Step 2: Output layer weight and bias gradients
         grad_output_weights = sum(
             g @ h.T for g, h in zip(output_grads, self.combined_states)
-        )
-        grad_output_bias = sum(output_grads)
+        )  # Gradient for W_y
+        grad_output_bias = sum(output_grads)  # Gradient for b_y
 
         # Step 3: Gradient flowing back into the combined hidden states
+        # Derivative of loss with respect to hidden states
         hidden_grads = [self.output_weights.T @ g for g in output_grads]
 
         # Step 4: Update output layer weights and bias
@@ -84,9 +86,9 @@ class BidirectionalRNN:
 
         # Step 5: BPTT through forward cell, right to left in time
         forward_grads = {
-            "input_weight_grad": 0,
-            "hidden_weight_grad": 0,
-            "hidden_bias_grad": 0,
+            "input_weight_grad": 0,  # W_xh
+            "hidden_weight_grad": 0,  # W_hh
+            "hidden_bias_grad": 0,  # b_h
         }
         current_grad = np.zeros((self.hidden_size, 1))
         for t in reversed(range(T)):
@@ -100,9 +102,9 @@ class BidirectionalRNN:
 
         # Step 6: BPTT through backward cell, left to right in time
         backward_grads = {
-            "input_weight_grad": 0,
-            "hidden_weight_grad": 0,
-            "hidden_bias_grad": 0,
+            "input_weight_grad": 0,  # W_xh
+            "hidden_weight_grad": 0,  # W_hh
+            "hidden_bias_grad": 0,  # b_h
         }
         current_grad = np.zeros((self.hidden_size, 1))
         for t in range(T):
