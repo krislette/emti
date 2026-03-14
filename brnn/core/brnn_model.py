@@ -18,8 +18,9 @@ class BidirectionalRNN:
         # Output bias, shape: (output_size, 1)
         self.output_bias = np.zeros((output_size, 1))
 
-    def feedforward(self, word_vectors: list) -> list:
-        T = len(word_vectors)
+    def feedforward(self, sequence: list) -> list:
+        # T = number of time steps in the sequence
+        T = len(sequence)
         forward_states = []
         backward_states = []
         prev_forward = np.zeros((self.hidden_size, 1))
@@ -29,13 +30,13 @@ class BidirectionalRNN:
 
         # Run forward cell left to right through the sequence
         for t in range(T):
-            prev_forward = self.forward_cell.forward(word_vectors[t], prev_forward)
+            prev_forward = self.forward_cell.forward(sequence[t], prev_forward)
             forward_states.append(prev_forward)
             self.forward_cache.append(self.forward_cell.cache.copy())
 
         # Run backward cell right to left through the sequence
         for t in reversed(range(T)):
-            prev_backward = self.backward_cell.forward(word_vectors[t], prev_backward)
+            prev_backward = self.backward_cell.forward(sequence[t], prev_backward)
             backward_states.insert(0, prev_backward)
             self.backward_cache.insert(0, self.backward_cell.cache.copy())
 
@@ -54,12 +55,12 @@ class BidirectionalRNN:
 
     def backpropagation(
         self,
-        word_vectors: list,
+        sequence: list,
         outputs: list,
         targets: list,
         lr: float = 0.001,
     ) -> None:
-        T = len(word_vectors)
+        T = len(sequence)
         mid = T // 2
 
         # Step 1: MSE gradient only at the middle position

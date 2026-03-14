@@ -36,6 +36,7 @@ def train_model(model, train_data, demo_input, demo_true, demo_max):
 
     for epoch in range(1, NUM_EPOCHS + 1):
         epoch_loss = 0.0
+
         for i in range(len(full_inputs)):
             outputs = model.feedforward(full_inputs[i])
             model.backpropagation(full_inputs[i], outputs, full_targets[i], LR)
