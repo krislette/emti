@@ -114,6 +114,7 @@ class BidirectionalRNN:
                 backward_grads[k] += g[k]
 
         # Step 7: Update both RNN cell weights
+        # new_weight = old_weight - learning_rate * gradient
         self.forward_cell.input_weights -= lr * forward_grads["input_weight_grad"]
         self.forward_cell.hidden_weights -= lr * forward_grads["hidden_weight_grad"]
         self.forward_cell.hidden_bias -= lr * forward_grads["hidden_bias_grad"]
