@@ -78,6 +78,7 @@ class BidirectionalRNN:
         hidden_grads = [self.output_weights.T @ g for g in output_grads]
 
         # Step 4: Update output layer weights and bias
+        # new_weight = old_weight - learning_rate * gradient
         self.output_weights -= lr * grad_output_weights
         self.output_bias -= lr * grad_output_bias
 
