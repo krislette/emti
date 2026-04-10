@@ -1,0 +1,9 @@
+[submodule "encodec-i"]
+	path = encodec-i
+	url = https://github.com/HansQueja/secret-accountant-g5-t2.git
+[submodule "encodec-ii"]
+	path = encodec-ii
+	url = https://github.com/HansQueja/broken-typewriter-g5-t3.git
+[submodule "encodec-iii"]
+	path = encodec-iii
+	url = https://github.com/feiryrej/liar-detector.git
